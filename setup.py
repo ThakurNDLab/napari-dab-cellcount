@@ -41,7 +41,7 @@ setup(
     ],
     entry_points={
         "napari.plugin": [
-            "napari-dab-cellcount = napari_dab_cellcount",
+            "napari_dab_cellcount = napari_dab_cellcount",
         ],
     },
 )
