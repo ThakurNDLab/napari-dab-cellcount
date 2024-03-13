@@ -1,3 +1,14 @@
+napari[all]
 napari-plugin-engine
 imagecodecs
 numpy
+scikit-learn
+scikit-image
+cudatoolkit
+cudnn
+pytorch
+pandas
+pillow
+torch-vision
+scipy
+opencv-python-headless
