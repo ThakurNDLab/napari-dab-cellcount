@@ -3,4 +3,4 @@ requires = ["setuptools", "wheel", "setuptools_scm"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools_scm]
-write_to = "napari-dab-cellcount/_version.py"
+write_to = "napari_dab_cellcount/_version.py"
