@@ -16,6 +16,8 @@ import sys
 import torch
 from ._pred import pred
 
+from scipy.ndimage import label
+
 # Initialize logger
 logger = logging.getLogger(__name__)
 if '--verbose' in sys.argv or '-v' in sys.argv:
@@ -45,14 +47,12 @@ def widget_wrapper():
     @no_grad()
     def run_dab_cellcount(image, model_weights_path):
         logger.debug(f'Computing masks')
-        # Load model weights here
-        # model = YourModelClass()
-        # model.load_state_dict(torch.load(model_weights_path))
+
         if torch.cuda.is_available():
-            image = image.to('cuda')
-            mask = pred(image)
+            device = 'gpu'
+            mask = pred(image, model_weights_path, device)
         else:
-            mask = pred(image)
+            mask = pred(image, model_weights_path)
         return mask
 
     @magicgui(
@@ -145,9 +145,9 @@ def widget_wrapper():
                 mask_worker.start()
 
         def _update_roi_result(mask, roi_key):
-            count = np.count_nonzero(mask)
+            labeled_mask, num_cells = label(mask)
             result_label = roi_results.get(roi_key, QLabel())
-            result_label.setText(f"ROI {shape_layer.data.index(roi) + 1}: {count}")
+            result_label.setText(f"ROI {shape_layer.data.index(roi) + 1}: {num_cells}")
             if roi_key not in roi_results:
                 result_layout.addWidget(result_label)
                 roi_results[roi_key] = result_label
