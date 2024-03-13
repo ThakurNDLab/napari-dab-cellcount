@@ -13,8 +13,15 @@ def double_conv(in_channels, out_channels):
         ReLU(inplace=True)
     )
 
-def up_conv(in_channels, out_channels):
-    return ConvTranspose2d(in_channels, out_channels, kernel_size=2, stride=2)
+def up_conv(in_channels, out_channels, output_size=None):
+    if output_size is None:
+        return ConvTranspose2d(in_channels, out_channels, kernel_size=2, stride=2)
+    else:
+        # Custom resize operation for non-standard dimensions
+        return nn.Sequential(
+            ConvTranspose2d(in_channels, out_channels, kernel_size=2, stride=2),
+            nn.Upsample(size=output_size, mode='bilinear', align_corners=True)
+        )
 
 class ResNetUnet(nn.Module):
     def __init__(self, *, weights=None, out_channels=1):
@@ -36,11 +43,11 @@ class ResNetUnet(nn.Module):
         # Decoder
         self.up_conv5 = up_conv(4096, 1024)
         self.conv5 = double_conv(2048 + 1024, 1024)
-        self.up_conv6 = up_conv(1024, 512)
+        self.up_conv6 = up_conv(1024, 512, output_size=(40, 40))  # Adjusted for 320x320 input
         self.conv6 = double_conv(1024 + 512, 512)
-        self.up_conv7 = up_conv(512, 256)
+        self.up_conv7 = up_conv(512, 256, output_size=(80, 80))  # Adjusted for 320x320 input
         self.conv7 = double_conv(512 + 256, 256)
-        self.up_conv8 = up_conv(256, 64)
+        self.up_conv8 = up_conv(256, 64, output_size=(160, 160))  # Adjusted for 320x320 input
         self.conv8 = double_conv(256 + 64, 64)
         self.final_conv = Conv2d(64, out_channels, kernel_size=1)
 
