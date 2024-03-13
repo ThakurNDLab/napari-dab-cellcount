@@ -27,7 +27,7 @@ class VGGUnet(nn.Module):
     def __init__(self, *, weights='DEFAULT', out_channels=1):
         super().__init__()
 
-        self.encoder = vgg16_bn(weights=weights).features
+        self.encoder = vgg11_bn(weights=weights).features
         self.block1 = nn.Sequential(*self.encoder[:6])
         self.block2 = nn.Sequential(*self.encoder[6:13])
         self.block3 = nn.Sequential(*self.encoder[13:20])
