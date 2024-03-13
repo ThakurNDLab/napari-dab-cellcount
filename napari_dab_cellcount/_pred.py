@@ -263,8 +263,7 @@ def postprocess(tiles_, batch_size=10):
 def pred(image_, weights, device='cpu'):
 	tiles_ = tile_image(image_)
 	
-	#model_ = ResNetUnet()
-	model_ = VGGUnet()
+	model_ = ResNetUnet()
 	model_.load_state_dict(torch.load(weights))
 	model_.eval()
 
