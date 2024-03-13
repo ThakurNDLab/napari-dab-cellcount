@@ -1,4 +1,4 @@
-name: cellpose_napari
+name: napari_dcc
 dependencies:
   - python==3.9
   - pip
