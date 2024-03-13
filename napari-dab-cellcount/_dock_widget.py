@@ -191,10 +191,3 @@ def widget_wrapper():
 @napari_hook_implementation
 def napari_experimental_provide_dock_widget():
     return widget_wrapper, {'name': 'DAB SN Cell Counter'}
-
-# Placeholder for the compute_masks function
-# Ensure to define this function based on your specific needs
-def compute_masks(masks_orig):
-    # This function should handle any additional processing of the masks
-    # For example, you might want to perform some filtering or other operations
-    pass
