@@ -1,0 +1,20 @@
+name: cellpose_napari
+dependencies:
+  - python==3.9
+  - pip
+  - cudatoolkit
+  - cudnn
+  - pip:
+    - PyQt5
+    - PyQt5.sip
+    - numpy
+    - numba
+    - scipy
+    - torch
+    - opencv-python-headless
+    - natsort
+    - tqdm
+    - imagecodecs
+    - tifffile
+    - napari
+    - napari-dab-cellcount
