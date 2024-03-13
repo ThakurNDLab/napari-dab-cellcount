@@ -24,10 +24,10 @@ class VGGUnet(nn.Module):
     """Unet with VGG-16 (with BN) encoder.
     """
 
-    def __init__(self, *, pretrained=False, out_channels=1):
+    def __init__(self, *, weights='DEFAULT', out_channels=1):
         super().__init__()
 
-        self.encoder = vgg16_bn(pretrained=pretrained).features
+        self.encoder = vgg16_bn(weights=weights).features
         self.block1 = nn.Sequential(*self.encoder[:6])
         self.block2 = nn.Sequential(*self.encoder[6:13])
         self.block3 = nn.Sequential(*self.encoder[13:20])
