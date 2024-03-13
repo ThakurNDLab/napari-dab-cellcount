@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="napari_dab_cellcount",
-    version="0.1.0",
+    version="0.1.1",
     author="Jyotirmay Srivastava :: Heavily Inspired from Cellpose-napari",
     author_email="jyotirmaysrivastava.in@gmail.com",
     license="MIT",
