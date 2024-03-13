@@ -37,7 +37,7 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.9",
         "Topic :: Software Development :: Libraries :: Python Modules",
-        "Topic :: Scientific/Engineering :: Pathology image processing",
+        "Topic :: Scientific/Engineering :: Image Processing",
     ],
     entry_points={
         "napari.plugin": [
