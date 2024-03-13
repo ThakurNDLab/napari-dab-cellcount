@@ -1,10 +1,10 @@
-name: napari-dab-cellcount
+name: napari_dab_cellcount
 schema_version: 0.1.0
 contributions:
   commands:
     - id: napari-dab-cellcount.widget_wrapper
       title: Create DAB SN Cell Counter
-      python_name: napari-dab-cellcount._dock_widget:widget_wrapper
+      python_name: napari_dab_cellcount._dock_widget:widget_wrapper
   widgets:
-    - command: napari-dab-cellcount.widget_wrapper
+    - command: napari_dab_cellcount.widget_wrapper
       display_name: DAB SN Cell Counter
