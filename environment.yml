@@ -1,6 +1,6 @@
 name: cellpose_napari
 dependencies:
-  - python==3.9.18
+  - python==3.9
   - pip
   - cudatoolkit
   - cudnn
