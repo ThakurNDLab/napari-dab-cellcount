@@ -21,7 +21,7 @@ def up_conv(in_channels, out_channels):
 
 
 class VGGUnet(nn.Module):
-    """Unet with VGG-16 (with BN) encoder.
+    """Unet with VGG-11 (with BN) encoder.
     """
 
     def __init__(self, *, weights='DEFAULT', out_channels=1):
