@@ -17,7 +17,7 @@ def up_conv(in_channels, out_channels):
     return ConvTranspose2d(in_channels, out_channels, kernel_size=2, stride=2)
 
 class ResNetUnet(nn.Module):
-    def __init__(self, *, weights='DEFAULT', out_channels=1):
+    def __init__(self, *, weights=None, out_channels=1):
         super().__init__()
 
         # Load pretrained ResNet-50
