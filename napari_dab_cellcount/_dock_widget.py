@@ -12,10 +12,11 @@ from qtpy.QtWidgets import QVBoxLayout, QLabel, QWidget, QFileDialog
 from napari import Viewer
 from napari.layers import Image, Shapes
 from magicgui import magicgui
+import os
 import sys
 import torch
-from ._pred import pred
-
+from _pred import pred
+from PIL import Image
 from scipy.ndimage import label
 
 # Initialize logger
@@ -39,20 +40,44 @@ def read_logging(log_file, logwindow):
 
 cc_strings = ['_cc_masks_', '_cc_outlines_']
 
+
+
+def get_reference_():
+    try:
+        # This will work for normal and compiled Python (.py, .pyc) files
+        location = os.path.abspath(__file__)
+    except NameError:
+        # This will work for bundled executables (e.g., created with PyInstaller)
+        location = os.path.abspath(sys.executable)
+    return location
+
+def find_file(location, filename):
+	for root, dirs, files in os.walk(location):
+		if filename in files:
+			return os.path.join(root, filename)
+	return None
+
+
 def widget_wrapper():
 	from napari.qt.threading import thread_worker
 	from torch import no_grad
+	#import torch.multiprocessing as mp
 
 	@thread_worker
 	@no_grad()
-	def run_dab_cellcount(image, model_weights_path):
+	def run_dab_cellcount(image, reference, model_weights_path):
 		logger.debug(f'Computing masks')
+
+		# Getting reference image
+		ref = get_reference_()
+		reference_ = find_file(ref, 'reference.jpg')
+		reference_ = np.asarray(Image.open(reference_))
 
 		if torch.cuda.is_available():
 			device = 'gpu'
-			mask = pred(image, model_weights_path, device)
+			mask = pred(image, model_weights_path,reference_,device)
 		else:
-			mask = pred(image, model_weights_path)
+			mask = pred(image, model_weights_path,reference_)
 		return mask
 
 	@magicgui(
@@ -119,7 +144,7 @@ def widget_wrapper():
 
 		roi_results = {}
 
-		def process_rois(update=False):
+		def process_rois(reference, update=False):
 			nonlocal model_weights_path
 			if not model_weights_path:
 				logger.warning("Model weights not loaded. Please load the model weights.")
@@ -137,7 +162,7 @@ def widget_wrapper():
 				min_row, min_col, max_row, max_col = map(int, roi.flatten())
 				roi_image = image_layer.data[min_row:max_row, min_col:max_col]
 
-				mask_worker = run_dab_cellcount(roi_image, model_weights_path)
+				mask_worker = run_dab_cellcount(roi_image, reference, model_weights_path)
 				mask_worker.returned.connect(lambda mask, rk=roi_key: _update_roi_result(mask, rk))
 				mask_worker.start()
 
@@ -158,11 +183,11 @@ def widget_wrapper():
 			gc.collect()
 
 		# Function to update segmentation and count for selected ROIs
-		def update_selected_rois():
-			process_rois(update=True)
+		def update_selected_rois(reference):
+			process_rois(reference, update=True)
 
 		# Connect the recompute counts button to the update function
-		widget.compute_counts_button.clicked.connect(update_selected_rois)
+		widget.compute_counts_button.clicked.connect(update_selected_rois(reference))
 
 		# Function to handle changes in the Shapes layer
 		@shape_layer.events.data.connect
@@ -173,7 +198,7 @@ def widget_wrapper():
 				roi_results.clear()
 
 		# Connect the Run Segmentation button to process_rois function
-		widget.call_button.clicked.connect(lambda: process_rois(update=False))
+		widget.call_button.clicked.connect(lambda: process_rois(reference, update=False))
 
 		# Add result_container to the widget
 		widget.native.layout().addWidget(result_container)
