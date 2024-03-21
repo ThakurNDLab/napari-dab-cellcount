@@ -7,7 +7,7 @@ from skimage.feature import peak_local_max
 from scipy import ndimage as ndi
 import argparse
 import torch
-from _model import ResNetUnet
+from ._model import ResNetUnet
 from scipy import stats
 from itertools import product
 import argparse
