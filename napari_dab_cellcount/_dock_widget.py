@@ -15,7 +15,7 @@ from magicgui import magicgui
 import os
 import sys
 import torch
-from _pred import pred
+from ._pred import pred
 from PIL import Image
 from scipy.ndimage import label
 
