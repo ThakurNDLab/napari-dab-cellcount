@@ -3,6 +3,7 @@ from setuptools import setup, find_packages
 setup(
     name="napari_dab_cellcount",
     version="0.1.4",
+
     python_requires=">=3.9, <3.11",
     author="Jyotirmay Srivastava :: Heavily Inspired from Cellpose-napari",
     author_email="jyotirmaysrivastava.in@gmail.com",
